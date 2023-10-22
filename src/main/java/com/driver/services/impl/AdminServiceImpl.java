@@ -78,6 +78,8 @@ public class AdminServiceImpl implements AdminService {
         serviceProvider.getCountryList().add(country);
         country.setServiceProvider(serviceProvider);
 
+        serviceProviderRepository1.save(serviceProvider);
+
         return serviceProvider;
     }
 }

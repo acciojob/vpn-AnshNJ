@@ -41,10 +41,11 @@ public class UserServiceImpl implements UserService {
         user.setUsername(username);
         user.setPassword(password);
         user.setOriginalCountry(country);
+        user.setOriginalIp(country.getCode()+"."+user.getId());
         country.setUser(user);
+
         userRepository3.save(user);
 
-        user.setOriginalIp(user.getId()+"."+country.getCode());
 
         return user;
     }
@@ -53,20 +54,22 @@ public class UserServiceImpl implements UserService {
     public User subscribe(Integer userId, Integer serviceProviderId) throws Exception {
         User user;
         try{
-            user = userRepository3.findById(userId.intValue()).get();
+            user = userRepository3.findById(userId).get();
         } catch(Exception e){
             throw new Exception("User not found");
         }
 
         ServiceProvider serviceProvider;
         try{
-            serviceProvider = serviceProviderRepository3.findById(serviceProviderId.intValue()).get();
+            serviceProvider = serviceProviderRepository3.findById(serviceProviderId).get();
         } catch(Exception e){
             throw new Exception("ServiceProvider not found");
         }
 
         user.getServiceProviderList().add(serviceProvider);
         serviceProvider.getUsers().add(user);
+
+        serviceProviderRepository3.save(serviceProvider);
 
         return user;
     }
