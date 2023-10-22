@@ -25,11 +25,18 @@ public class UserServiceImpl implements UserService {
     public User register(String username, String password, String countryName) throws Exception{
         //create a user of given country. The originalIp of the user should be "countryCode.userId" and return the user. Note that right now user is not connected and thus connected would be false and maskedIp would be null
         //Note that the userId is created automatically by the repository layer
-        String countryNameCaps = countryName.toUpperCase();
-        if (!countryNameCaps.equals("IND") && !countryNameCaps.equals("USA") && !countryNameCaps.equals("AUS") && !countryNameCaps.equals("CHI") && !countryNameCaps.equals("JPN")) throw new Exception("Country not found");
+        boolean isPresent = false;
+        String countryNameUpperCase = countryName.toUpperCase();
+
+        for(CountryName country : CountryName.values()){
+            if(country.toString().equals(countryNameUpperCase)) isPresent = true;
+        }
+
+        if(!isPresent) throw new Exception("Country not found");
+
         Country country = new Country();
-        country.setCountryName(CountryName.valueOf(countryNameCaps));
-        country.setCode(CountryName.valueOf(countryNameCaps).toCode());
+        country.setCountryName(CountryName.valueOf(countryNameUpperCase));
+        country.setCode(CountryName.valueOf(countryNameUpperCase).toCode());
 
         User user = new User();
         user.setUsername(username);

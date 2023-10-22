@@ -44,8 +44,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
+        boolean isPresent = false;
         String countryNameUpperCase = countryName.toUpperCase();
-        if (!countryNameUpperCase.equals("IND") && !countryNameUpperCase.equals("USA") && !countryNameUpperCase.equals("AUS") && !countryNameUpperCase.equals("CHI") && !countryNameUpperCase.equals("JPN")) throw new Exception("Country not found");
+
+        for(CountryName country : CountryName.values()){
+            if(country.toString().equals(countryNameUpperCase)) isPresent = true;
+        }
+
+        if(!isPresent) throw new Exception("Country not found");
+
         ServiceProvider serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
         Country country = new Country();
         country.setCountryName(CountryName.valueOf(countryNameUpperCase));
