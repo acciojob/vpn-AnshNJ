@@ -33,7 +33,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(user.getConnected()) throw new Exception("Already Connected");
 
         //Check country
-        if(user.getCountry().getCountryName().toString().equals(countryName)) return user;
+        if(user.getOriginalCountry().getCountryName().toString().equals(countryName)) return user;
 
         //Get SP with given country
         List<ServiceProvider> serviceProviderList = serviceProviderRepository2.findAll();
@@ -109,7 +109,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             String countryCode = maskedIp.substring(0,3).toUpperCase();
 
             //If receiver is connected, and their country is the same as senders, return sender directly
-            if(countryCode.equals(sender.getCountry().getCountryName().toCode())) return sender;
+            if(countryCode.equals(sender.getOriginalCountry().getCountryName().toCode())) return sender;
 
             //Establish a connection for sender with same country as receiver
             //Get country name from code
@@ -128,10 +128,10 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         //If receiver is not connected
         //Check if they are in same country
-        if(receiver.getCountry().equals(sender.getCountry())) return sender;
+        if(receiver.getOriginalCountry().equals(sender.getOriginalCountry())) return sender;
 
         //Establish sender's vpn to receiver's country
-        sender = connect(senderId , receiver.getCountry().getCountryName().toString());
+        sender = connect(senderId , receiver.getOriginalCountry().getCountryName().toString());
         if(!sender.getConnected()) throw new Exception("Cannot establish communication");
         return sender;
     }
