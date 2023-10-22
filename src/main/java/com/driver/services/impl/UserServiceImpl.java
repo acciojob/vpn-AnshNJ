@@ -23,38 +23,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String username, String password, String countryName) throws Exception{
-        boolean isPresent = false;
-        countryName = countryName.toUpperCase();
-
-        for(CountryName country : CountryName.values()){
-            if(country.toString().equals(countryName)) isPresent = true;
-        }
-
-        if(!isPresent) throw new Exception("Country not found");
-
+        //create a user of given country. The originalIp of the user should be "countryCode.userId" and return the user. Note that right now user is not connected and thus connected would be false and maskedIp would be null
+        //Note that the userId is created automatically by the repository layer
+        String countryNameCaps = countryName.toUpperCase();
+        if (!countryNameCaps.equals("IND") && !countryNameCaps.equals("USA") && !countryNameCaps.equals("AUS") && !countryNameCaps.equals("CHI") && !countryNameCaps.equals("JPN")) throw new Exception("Country not found");
         Country country = new Country();
-        country.setCountryName(CountryName.valueOf(countryName));
-        country.setCode(CountryName.valueOf(countryName).toCode());
-
+        country.setCountryName(CountryName.valueOf(countryNameCaps));
+        country.setCode(CountryName.valueOf(countryNameCaps).toCode());
 
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setOriginalCountry(country);
         user.setOriginalIp(country.getCode()+"."+user.getId());
         country.setUser(user);
-
+        user.setOriginalCountry(country);
+        user.setConnected(false);
         userRepository3.save(user);
-
-
         return user;
     }
 
     @Override
     public User subscribe(Integer userId, Integer serviceProviderId) {
+        //subscribe to the serviceProvider by adding it to the list of providers and return updated User
         User user = userRepository3.findById(userId).get();
-
-
         ServiceProvider serviceProvider = serviceProviderRepository3.findById(serviceProviderId).get();
 
         user.getServiceProviderList().add(serviceProvider);
