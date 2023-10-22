@@ -21,13 +21,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public User connect(int userId, String countryName) throws Exception{
-        User user;
-        //Check if user exists
-        try{
-            user = userRepository2.findById(userId).get();
-        } catch(Exception e){
-            throw new Exception("User not found");
-        }
+        User user = userRepository2.findById(userId).get();
 
         //check if user is already connected to a SP
         if(user.getConnected()) throw new Exception("Already Connected");
@@ -36,7 +30,10 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(user.getOriginalCountry().getCountryName().toString().equals(countryName)) return user;
 
         //Get SP with given country
-        List<ServiceProvider> serviceProviderList = serviceProviderRepository2.findAll();
+        if (user.getServiceProviderList() == null) {
+            throw new Exception("Unable to connect");
+        }
+        List<ServiceProvider> serviceProviderList = user.getServiceProviderList();
         int spId = Integer.MAX_VALUE;
         ServiceProvider serviceProvider = null;
         Country country = null;
@@ -52,8 +49,6 @@ public class ConnectionServiceImpl implements ConnectionService {
             }
         }
 
-        if(serviceProvider == null) throw new Exception("Unable to connect");
-
         //Establish connection
         Connection connection = new Connection();
         connection.setUser(user);
@@ -61,7 +56,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.getConnectionList().add(connection);
 
         user.getServiceProviderList().add(serviceProvider);
-        user.setMaskedIp(country.getCountryName().toCode() + "." + serviceProvider.getId() + "." + user.getId());
+        user.setMaskedIp(country.getCode() + "." + serviceProvider.getId() + "." + userId);
         user.setConnected(true);
 
         serviceProvider.getUsers().add(user);
@@ -73,13 +68,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
     @Override
     public User disconnect(int userId) throws Exception {
-        User user;
-        //Check if user exists
-        try{
-            user = userRepository2.findById(userId).get();
-        } catch(Exception e){
-            throw new Exception("User not found");
-        }
+        User user = userRepository2.findById(userId).get();
 
         if(!user.getConnected()) throw new Exception("Already disconnected");
 
