@@ -22,7 +22,7 @@ public class AdminController {
     }
 
     @PostMapping("/addProvider")
-    public ResponseEntity<Void> addServiceProvider(@RequestParam int adminId, @RequestParam String providerName) throws Exception {
+    public ResponseEntity<Void> addServiceProvider(@RequestParam int adminId, @RequestParam String providerName) {
         //add a serviceProvider under the admin and return updated admin
         Admin admin = adminService.addServiceProvider(adminId, providerName);
         return new ResponseEntity<>(HttpStatus.OK);

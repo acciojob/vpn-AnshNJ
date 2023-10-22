@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         countryName = countryName.toUpperCase();
 
         for(CountryName country : CountryName.values()){
-            if(country.equals(countryName)) isPresent = true;
+            if(country.toString().equals(countryName)) isPresent = true;
         }
 
         if(!isPresent) throw new Exception("Country not found");
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User subscribe(Integer userId, Integer serviceProviderId) throws Exception {
+    public User subscribe(Integer userId, Integer serviceProviderId) {
         User user = userRepository3.findById(userId).get();
 
 
