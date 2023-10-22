@@ -23,7 +23,7 @@ public class ServiceProvider {
     private List<User> users;
 
     @OneToMany(mappedBy = "service_provider" , cascade = CascadeType.ALL)
-    private List<Connection> connectionList;
+    private List<Connection> connectionList = new ArrayList<>();
 
     public ServiceProvider() {
     }

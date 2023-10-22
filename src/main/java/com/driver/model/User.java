@@ -1,6 +1,7 @@
 package com.driver.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,13 +23,13 @@ public class User {
     private Boolean connected = false;
 
     @ManyToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<ServiceProvider> serviceProviderList;
+    private List<ServiceProvider> serviceProviderList = new ArrayList<>();
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
     private Country country;
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<Connection> connectionList;
+    private List<Connection> connectionList = new ArrayList<>();
 
     public User() {
     }
