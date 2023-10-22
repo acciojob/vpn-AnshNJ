@@ -33,12 +33,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin addServiceProvider(int adminId, String providerName) throws Exception {
-        Admin admin;
-        try{
-            admin = adminRepository1.findById(adminId).get();
-        } catch(Exception e){
-            throw new Exception("Admin not found");
-        }
+        Admin admin = adminRepository1.findById(adminId).get();
+
 
         ServiceProvider serviceProvider = new ServiceProvider();
         serviceProvider.setName(providerName);
@@ -52,12 +48,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
-        ServiceProvider serviceProvider;
-        try{
-            serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
-        } catch(Exception e){
-            throw new Exception("Service Provider Not Found");
-        }
+        ServiceProvider serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
+
 
         //check if present
         boolean isPresent = false;
