@@ -1,6 +1,7 @@
 package com.driver.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,13 +14,6 @@ public class User {
     private String originalIp;
     private String maskedIp;
 
-    public String getMaskedIp() {
-        return maskedIp;
-    }
-
-    public void setMaskedIp(String maskedIp) {
-        this.maskedIp = maskedIp;
-    }
 
     private Boolean connected;
 
@@ -47,6 +41,13 @@ public class User {
         this.connectionList = connectionList;
         this.originalCountry = country;
         this.maskedIp=maskedIp;
+    }
+    public String getMaskedIp() {
+        return maskedIp;
+    }
+
+    public void setMaskedIp(String maskedIp) {
+        this.maskedIp = maskedIp;
     }
 
     public int getId() {
